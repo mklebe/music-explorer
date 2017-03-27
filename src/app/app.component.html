@@ -1,3 +1,27 @@
-<h1>
-  {{title}}
-</h1>
+<div class="video-wrapper">
+  <video autoplay="true" id="videoElement"></video> 
+  <iframe width="640" height="480" style="position: absolute; left: 0; width: 640px; height: 480px" src="https://sketchfab.com/models/e996fca8b52a4f54ba573daa4ab3ab22/embed?autostart=1&amp;transparent=1&amp;ui_related=0" frameborder="0" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" onmousewheel=""></iframe>
+</div>
+
+<script>
+  var video = document.querySelector("#videoElement");
+  let p = document.querySelector('#cameras')
+
+  let videoId;
+
+
+  navigator.mediaDevices.enumerateDevices()
+  .then(devices => {
+    var camera = devices.find(device => device.label.indexOf('back') >= 0);
+    if (camera) {
+      var constraints = { deviceId: { exact: camera.deviceId } };
+      return navigator.mediaDevices.getUserMedia({ video: constraints });
+    }
+    else {
+      p.innerHTML = "No Backcamera for you!"
+    }
+  })
+  .then(stream => video.srcObject = stream)
+  .catch(e => console.error(e));
+</script>
+        
